@@ -1,0 +1,204 @@
+Question:
+what is rest.
+
+Answer:
+. REpresentational State Transfer
+. REST is architectural style for building web service using HTTP protocol, 
+  where web services are treated as resources and 
+  some basic HTTP methods like GET, POST, DELETE are used
+  to identify standard action on resources
+Example: http://localhost:8080/Books/getBooks here the base URL is http://localhost:8080/Books
+         /getBooks is resource available on the server.
+		 
+. RESTful web API (also called a RESTful web service) is a web API implemented 
+  using HTTP and the REST principles.
+
+. REST ALWAY USES HTTP/HTTPS FOR COMMUNICATION.
+
+QUESTION:
+WHAT IS SOAP.
+
+ANSWER:
+. Simple Object Access Protocol
+. SOAP is a protocol specification for exchanging structured information in XML form
+
+QUESTION:
+ What are the underlying protocol over which you can send SOAP request ?
+
+ANSWER:
+ You can send SOAP message via Hypertext Transfer Protocol (HTTP), 
+ Simple  Mail Transfer Protocol (SMTP),
+ HTTPS(Secured HTTP).
+ 
+QUESTION:
+. What is WSDL ? What does WSDL Contains ?
+
+ANSWER:
+. WSDL(Web Services Description Language) is an XML grammar for specifying a public interface for a Web service.
+
+. WSDL contains following key information :
+  Information on all publicly available functions,
+  set of operations(through <operation> Tag in WSDL).
+  Information about messages exchanges using <input> & <output> tag in operation & Message definition using <element>
+ 
+. Binding information which provides information about how those messages can be exchanged,
+  more specifically in that you need to specify transport protocol(HTTP/SMTP) 
+  and binding style(RPC or Document).
+  
+. Address information for locating the specified service etc.
+
+QUESTION:
+. What is UDDI ?
+
+ANSWER:
+. UDDI is used for publishing and finding businesses and Web services. 
+
+
+QUESTION:
+. What are Tools/API are there for developing/testing  web service?
+
+ANSWER:
+. Testing Tools for Web Service : 
+		SoapUI for SOAP Web Service,
+		Firefox plugin for testing RESTFul Services.
+
+.  REST APIs : 
+		Spring REST Web Service using MVC, 
+		Jersey API, 
+		CFX, 
+		Axis, 
+		Restlet etc.
+.	SOAP APIs : 
+		Axis, 
+		Spring Web Service etc 
+		
+QUESTION:
+. What is the difference between HTTP POST and PUT requests in REST ?
+
+ANSWER:
+. POST is used to create 
+  where as PUT is used to (update , if does not exist create it)/ Replace.
+
+  
+QUESTION:
+. WHAT IS DIFFERENCE BETWEEN REST AND SOAP?
+
+ANSWER:
+. REST is architectural style for building web service using HTTP protocol, 
+  where web services are treated as resources and 
+  some basic HTTP methods like GET, POST, DELETE are used
+  to identify standard action on resources
+. SOAP is a protocol specification for exchanging structured information in XML form
+
+
+. REST uses HTTP/HTTPS
+. SOAP can use almost any transport to send the request
+  (for example we can have SOAP Messages over SMTP), SOAP is a XML based messaging protocol.
+  
+
+. REST is totally stateless operations 
+. SOAP supports statefull calls too.
+
+. REST APIs can be consumed using simple GET requests, REST response can be cached, 
+. SOAP this is not possible with SOAP.
+
+. REST is Lighter, 
+. SOAP requires an XML wrapper around every request and response(SOAP Headers, XML tags etc).
+  Thats why REST is preferred choice in mobile devices and PDA's
+
+. REST supports other formats too for example JSON
+. SOAP message format is restricted to XML only
+
+
+. REST is simpler in terms of development
+. SOAP compared to SOAP
+
+QUESTION:
+. Why to use SOAP ?
+
+ANSWER:
+. SOAP provides some features like Security, 
+  Reliable Messaging, 
+  Atomic transaction which are not available in REST API.
+
+. WS-ReliableMessaging   
+		Reliable messages delivery between distributed applications in case of failures.
+
+. WS-AtomicTransaction
+		two-phase commit across distributed transactional resources		
+
+
+QUESTION:
+. JSON Vs XML 		
+
+ANSWER:
+. Parsing and Generating JSON data is easier as compared to XML.
+. JSON has simpler structure than XML.
+. XML is more rich in features and you can have more control over data 
+  and do great amount of validation as compared to JSON.
+  You can have DTD's for XML to specify validation in details 
+. JSON is not in a document format neither it is markup language but XML is.  
+. JSON is best for simpler use/scenario, 
+  for better security,support and validation XML is better.
+  
+  
+Question on project:
+--------------------
+QUESTION:
+. how do you have implemented web - services in your project.  
+
+ANSWER:
+. after completion of web. customer demands for this e-wallet should be available for devices 
+ so on top of that we have to implement web - services 
+
+STEP -> 1
+---------
+CONFIGURE SERVLET IN WEB.XML
+
+<servlet>
+	<servlet-name>jersey-serlvet</servlet-name>
+		<servlet-class>
+            com.sun.jersey.spi.container.servlet.ServletContainer
+        </servlet-class>
+		<init-param>
+		     <param-name>com.sun.jersey.config.property.packages</param-name>
+		     <param-value>com.mkyong.rest</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+ 
+	<servlet-mapping>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+</servlet>
+
+STEP -> 2:
+----------
+CREATE REST SERVICE CLASS
+@Path("/devicehome")
+public class LoginRestService{
+
+	@Path("/activate")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response activateDevice(@Context HttpServletRequest request, String loginInput) throws WalletException {
+			try{
+				Gson gson = new Gson();
+				restRequest = gson.fromJson(loginInput, RestRequest.class);
+			}catch(Exception e){
+				return ServerUtility.papulateErrorCode(request, 
+					ServerProcessorStatus.EMPTY_DATA.getValue());
+			}
+			
+	}
+	
+}	
+  
+REQUEST:
+{"email":"document.testing.003@gmail.com","password":"aaaa1A@","userType":"C", "msisdnNumber":"111113","simNumber":"33333","imeiNumber":"44444"}
+
+RESPONSE:
+{"ResponseCode":"M0002","ResponseMessage":"user.does.not.exist","ResponseType":"02"}
+  
